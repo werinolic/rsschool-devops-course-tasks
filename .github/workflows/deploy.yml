@@ -9,7 +9,8 @@ on:
       - master
 
 env:
-  AWS_ACC_ID: ${{ secrets.AWS_ACC_ID }}
+  AWS_ACC_ID: ${{ secrets.AWS_ROLE_ARN }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
 
 jobs:
   terraform-check:
@@ -30,7 +31,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           audience: sts.amazonaws.com
-          aws-region: us-east-2
+          aws-region: ${{ env.AWS_REGION }}
           role-to-assume: arn:aws:iam::${{ env.AWS_ACC_ID }}:role/GithubActionsRole
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
@@ -50,7 +51,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           audience: sts.amazonaws.com
-          aws-region: us-east-2
+          aws-region: ${{ env.AWS_REGION }}
           role-to-assume: arn:aws:iam::${{ env.AWS_ACC_ID }}:role/GithubActionsRole
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
