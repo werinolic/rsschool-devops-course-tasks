@@ -17,7 +17,7 @@ jobs:
       - name: Terragrunt init
         uses: gruntwork-io/terragrunt-action@v2
         with:
-          tf_version: ${{ env.tf_version }}
+          tf_version: ${{ env.TF_VERSION }}
           tg_version: ${{ env.tg_version }}
           tg_dir: ${{ env.working_directory }}
           tg_command: 'init'
@@ -37,7 +37,7 @@ jobs:
       - name: Terragrunt init
         uses: gruntwork-io/terragrunt-action@v2
         with:
-          tf_version: ${{ env.tf_version }}
+          tf_version: ${{ env.TF_VERSION }}
           tg_version: ${{ env.tg_version }}
           tg_dir: ${{ env.working_directory }}
           tg_command: 'init'
@@ -57,7 +57,7 @@ jobs:
       - name: Terragrunt init
         uses: gruntwork-io/terragrunt-action@v2
         with:
-          tf_version: ${{ env.tf_version }}
+          tf_version: ${{ env.TF_VERSION }}
           tg_version: ${{ env.tg_version }}
           tg_dir: ${{ env.working_directory }}
           tg_command: 'init'
