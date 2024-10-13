@@ -12,14 +12,20 @@ resource "aws_iam_role" "github_actions_role" {
         Condition : {
           StringEquals : {
             "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-            "token.actions.githubusercontent.com:sub" : "repo:werinolic/rsschool-devops-course-tasks:*"
+          },
+           StringLike : {
+            "token.actions.githubusercontent.com:sub": [
+              "repo:werinolic/rsschool-devops-course-tasks:*"
+            ]
           }
         }
       }
     ]
   })
 }
-
+output "github_actions_role_arn" {
+  value = aws_iam_role.github_actions_role.arn
+}
 resource "aws_iam_role_policy_attachment" "ec2_full_access" {
   role       = aws_iam_role.github_actions_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
