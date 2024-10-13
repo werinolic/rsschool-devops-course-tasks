@@ -18,7 +18,6 @@ resource "aws_iam_role" "github_actions_role" {
       }
     ]
   })
-  depends_on = [aws_iam_openid_connect_provider.github_actions]
 }
 
 # Attach required policies to the IAM role
