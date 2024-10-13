@@ -17,6 +17,11 @@ jobs:
     name: Terraform check
     runs-on: ubuntu-latest
     steps:
+      - name: List directory contents
+        run: |
+          echo "Current directory: $(pwd)"
+          ls -la
+          find . -type d
       - name: Terraform format checking
         run: terraform fmt
         working-directory: terraform
