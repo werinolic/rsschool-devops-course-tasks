@@ -1,25 +1,24 @@
 resource "aws_iam_role" "github_actions_role" {
   name = "GithubActionsRole"
-
-  # Trust relationship for GitHub Actions via OIDC
   assume_role_policy = jsonencode({
     Version : "2012-10-17",
     Statement : [
       {
         Effect : "Allow",
         Principal : {
-          Federated : "arn:aws:iam::rsschool-devops:oidc-provider/token.actions.githubusercontent.com"
+          Federated : aws_iam_openid_connect_provider.github_actions.arn
         },
         Action : "sts:AssumeRoleWithWebIdentity",
         Condition : {
           StringEquals : {
             "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-            "token.actions.githubusercontent.com:sub" : "repo:werinolic/rsschool-devops-course-tasks:ref:refs/heads/main"
+            "token.actions.githubusercontent.com:sub" : "repo:werinolic/rsschool-devops-course-tasks:ref:refs/heads/master"
           }
         }
       }
     ]
   })
+  depends_on = [aws_iam_openid_connect_provider.github_actions]
 }
 
 # Attach required policies to the IAM role
