@@ -1,16 +1,16 @@
 terraform {
   backend "s3" {
-    bucket         = "terraform-state-bucket"
+    bucket         = "rsschool-devops-terraform-state-bucket"
     key            = "terraform/state.tfstate"
-    dynamodb_table = "terraform-lock-table"
+    # dynamodb_table = "terraform-lock-table"
     encrypt        = true
-    region         = "us-east-1"
+    region         = "eu-west-1"
   }
 }
 
-resource "aws_s3_bucket" "terraform_state_s3" {
-  bucket = "terraform-state-bucket"
-  tags = {
-    name = "TerraformState"
-  }
-}
+# resource "aws_s3_bucket" "terraform_state_s3" {
+#   bucket = "rsschool-devops-terraform-state-bucket"
+#   tags = {
+#     name = "TerraformState"
+#   }
+# }
