@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "us-east-1" # Replace with your preferred AWS region
-}
-
 resource "aws_iam_role" "github_actions_role" {
   name = "GithubActionsRole"
 
