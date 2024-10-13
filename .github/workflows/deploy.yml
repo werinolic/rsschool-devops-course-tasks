@@ -8,65 +8,53 @@ on:
     branches:
       - master
 
+env:
+  AWS_ACC_ID: ${{ secrets.AWS_ACC_ID }}
+
 jobs:
   terraform-check:
+    name: Terraform check
     runs-on: ubuntu-latest
     steps:
-      - name: Git checkout
-        uses: actions/checkout@v2
-      - name: Terragrunt init
-        uses: gruntwork-io/terragrunt-action@v2
-        with:
-          tf_version: ${{ env.TF_VERSION }}
-          tg_version: ${{ env.tg_version }}
-          tg_dir: ${{ env.working_directory }}
-          tg_command: 'init'
-      - name: Setup terraform
-        uses: hashicorp/setup-terraform@v3
-      - name: Terraform fmt
-        run: terraform fmt -check
+      - name: Terraform format checking
+        run: terraform fmt
 
   terraform-plan:
+    name: Terraform planning
     runs-on: ubuntu-latest
     needs: terraform-check
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Setup terraform
-        uses: hashicorp/setup-terraform@v3
-      - name: Terragrunt init
-        uses: gruntwork-io/terragrunt-action@v2
+        uses: actions/checkout@v4
+      - name: Set AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          tf_version: ${{ env.TF_VERSION }}
-          tg_version: ${{ env.tg_version }}
-          tg_dir: ${{ env.working_directory }}
-          tg_command: 'init'
-      - name: Terraform plan
+          audience: sts.amazonaws.com
+          aws-region: us-east-2
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACC_ID }}:role/GithubActionsRole
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Terraform init
+        run: terraform init
+      - name: Terraform planning
         run: terraform plan
 
   terraform-apply:
+    name: Terraform deploying
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/task_1' && github.event_name == 'push'
     needs: terraform-plan
-    permissions:
-      id-token: write  
-      contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Terragrunt init
-        uses: gruntwork-io/terragrunt-action@v2
+        uses: actions/checkout@v4
+      - name: Set AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          tf_version: ${{ env.TF_VERSION }}
-          tg_version: ${{ env.tg_version }}
-          tg_dir: ${{ env.working_directory }}
-          tg_command: 'init'
-      - name: Setup terraform
+          audience: sts.amazonaws.com
+          aws-region: us-east-2
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACC_ID }}:role/GithubActionsRole
+      - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
-      - name: Terraform apply
-        run: terraform apply -auto-approve
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ROLE_ARN }}:role/GithubActionsRole
-          aws-region: ${{ vars.AWS_REGION }}
+      - name: Terraform init
+        run: terraform init
+      - name: Terraform deploying
+        run: terraform apply
