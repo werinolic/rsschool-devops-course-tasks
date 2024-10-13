@@ -6,7 +6,7 @@ resource "aws_iam_role" "github_actions_role" {
       {
         Effect : "Allow",
         Principal : {
-          Federated : "aws_iam_openid_connect_provider.aws_iam_openid_connect_provider.arn"
+          Federated : aws_iam_openid_connect_provider.github_actions.arn
         },
         Action : "sts:AssumeRoleWithWebIdentity",
         Condition : {
