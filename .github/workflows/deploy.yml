@@ -17,14 +17,8 @@ jobs:
     name: Terraform check
     runs-on: ubuntu-latest
     steps:
-      - name: List directory contents
-        run: |
-          echo "Current directory: $(pwd)"
-          ls -la
-          find . -type d
       - name: Terraform format checking
         run: terraform fmt
-        working-directory: terraform
 
   terraform-plan:
     name: Terraform planning
@@ -43,10 +37,8 @@ jobs:
         uses: hashicorp/setup-terraform@v3
       - name: Terraform init
         run: terraform init
-        working-directory: terraform
       - name: Terraform planning
         run: terraform plan
-        working-directory: terraform
 
   terraform-apply:
     name: Terraform deploying
@@ -65,7 +57,5 @@ jobs:
         uses: hashicorp/setup-terraform@v3
       - name: Terraform init
         run: terraform init
-        working-directory: terraform
       - name: Terraform deploying
         run: terraform apply
-        working-directory: terraform
