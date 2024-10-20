@@ -88,3 +88,29 @@ resource "aws_security_group" "worker_sg" {
     Name = "worker-sg"
   }
 }
+
+resource "aws_security_group" "nat_sg" {
+  name        = "nat_sg"
+  description = "Security group for NAT instance"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    description = "Allow inbound SSH from your IP"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [var.allowed_ssh_cidr]
+  }
+
+  egress {
+    description = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "nat-sg"
+  }
+}
