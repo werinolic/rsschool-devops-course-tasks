@@ -12,3 +12,7 @@ output "worker_private_ips" {
   description = "Private IPs of worker nodes"
   value       = [for instance in aws_instance.worker : instance.private_ip]
 }
+
+output "github_actions_role_arn" {
+  value = aws_iam_role.github_actions_role.arn
+}
