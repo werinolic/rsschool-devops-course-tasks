@@ -29,7 +29,7 @@ resource "aws_route_table" "private" {
 resource "aws_route" "private_internet_access" {
   route_table_id         = aws_route_table.private.id
   destination_cidr_block = "0.0.0.0/0"
-  network_interface_id   = aws_instance.nat.primary_network_interface_id
+  nat_gateway_id   = aws_nat_gateway.nat_gw.id
 }
 
 resource "aws_route_table_association" "private" {
