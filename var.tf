@@ -25,3 +25,29 @@ variable "availability_zones" {
   type        = list(string)
   default     = ["eu-west-1a", "eu-west-1b"]
 }
+
+variable "key_pair_name" {
+  description = "Existing AWS Key Pair name for EC2 instances"
+  type        = string
+  default     = "id_rsa"
+}
+
+variable "allowed_ssh_cidr" {
+  description = "CIDR blocks allowed to SSH into bastion host"
+  default     = "0.0.0.0/0" # your IP
+}
+
+variable "instance_type" {
+  description = "EC2 instance type"
+  default     = "t2.micro"
+}
+
+variable "master_instance_count" {
+  description = "Number of master nodes"
+  default     = 1
+}
+
+variable "worker_instance_count" {
+  description = "Number of worker nodes"
+  default     = 1
+}
